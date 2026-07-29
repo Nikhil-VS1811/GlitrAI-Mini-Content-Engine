@@ -1,0 +1,51 @@
+:root {
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+  background: #f8fafc;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.upload-form, .job-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+input, textarea, button {
+  font: inherit;
+  padding: 0.5rem;
+}
+
+button {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.error-message {
+  margin: 0;
+  color: #b91c1c;
+}
+
+.generated-image {
+  display: block;
+  max-width: 100%;
+  margin-top: 0.5rem;
+}

@@ -98,15 +98,40 @@ def process_marketing_prompt_job(job_id: UUID) -> None:
     db = SessionLocal()
     try:
         job = mark_job_processing(db, job_id)
-        generated_prompt = generate_marketing_prompt(job.product_name, job.description)
+
+        # Try Ollama first, fall back if unavailable
+        try:
+            generated_prompt = generate_marketing_prompt(
+                job.product_name,
+                job.description,
+            )
+        except Exception:
+            logger.warning("Ollama unavailable. Using fallback prompt.")
+            generated_prompt = (
+                f"Professional studio product photograph of {job.product_name}. "
+                f"{job.description}. Soft lighting, premium ecommerce style, "
+                f"high quality, white background."
+            )
+
         if job.uploaded_image is None:
             raise ValueError("Job has no uploaded image.")
 
         uploaded_image_path = str(
             Path(__file__).resolve().parents[1] / "uploads" / job.uploaded_image
         )
-        generated_image = generate_image(generated_prompt, uploaded_image_path)
-        complete_job(db, job_id, generated_prompt, generated_image)
+
+        generated_image = generate_image(
+            generated_prompt,
+            uploaded_image_path,
+        )
+
+        complete_job(
+            db,
+            job_id,
+            generated_prompt,
+            generated_image,
+        )
+
     except Exception:
         logger.exception("Marketing prompt generation failed for job %s", job_id)
         try:
